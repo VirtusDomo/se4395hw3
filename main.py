@@ -9,9 +9,8 @@ import os
 import re
 import string
 import nltk
-from nltk.corpus import stopwords
+from nltk.corpus import stopwords, words, wordnet as wn
 from nltk.stem import PorterStemmer
-
 
 #Part 1
 def reader(filepath):
@@ -67,12 +66,28 @@ def importantDict(unique):
     tup = []
     for w in unique:
         tup.append(importantTuple(w))
-    print(tup)
+    #print(tup)
 
     return tup
 
 def dictWork(tups):
-    return 0
+    book = {}
+
+    english = words.words()
+    english_set = set(english)
+    sorted_set = sorted(english_set)
+    #print(english, english_set)
+
+    for word, root in tups:
+        lst = []
+        for term in sorted_set:
+            if not term.startswith(root):
+                continue
+            else:
+                lst += term
+        book[root].append(lst)
+
+    return book
 
 
 def main():
@@ -84,8 +99,8 @@ def main():
         #Step 3, toke saved for step 11
         toke, tokecnt, unitoke = tokens(l)
         tups = importantDict(unitoke)
-
-
+        dct = dictWork(tups)
+        print(dct)
         #print(tokecnt)
         #print(listed[0].lower())
     else:
